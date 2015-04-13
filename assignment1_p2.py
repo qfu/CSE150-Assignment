@@ -15,17 +15,25 @@ def is_complete(board):
 def swap_tile(original, new, board):
 
     new_board = copy.deepcopy(board)
-    print "new position before action", new_board
+    #print "new position before action", new_board
     x = new_board[new[0]][new[1]]
     new_board[original[0]][original[1]] = x
     new_board[new[0]][new[1]] = 0
-    print "new position after action", new_board
+    #print "new position after action", new_board
     return new_board
 def find_zero(board): 
     for y,row in enumerate(board): 
         for x,col in enumerate(row): 
             if board[y][x]==0: 
                 return [y,x]
+def compare_state(b1,b2): 
+    a = True
+    for y,row in enumerate(b1): 
+        for x,col in enumerate(row): 
+            if b1[y][x] != b2[y][x]: 
+                a = False
+    a = True
+    return a
 def board_info(board): 
     for y,row in enumerate(board): 
         for x,col in enumerate(row): 
@@ -33,7 +41,7 @@ def board_info(board):
         y += 1
     return [y-1,x-1]
 def action(position, board):
-    print "applying", position, "to", board
+    #print "applying", position, "to", board
     x = position[0]
     y = position[1]
     z = position[2]
@@ -64,50 +72,86 @@ def next_states(current,board):
             continue
         if tempx < 0 or tempy < 0:
             continue
-        if swap_tile(current,x,board) != board:
-            final.append(x)
+        #if compare_state(swap_tile(current,x,board),board) == False:
+        final.append(x)
+    #print final
     return final
 
 def BFS(board,visited):
     closed = []
     open = [board]   
-    return_list=[]
-    direction = []
-    return_list2=[]
-    counter = 0
-    index = 0
     while len(open) > 0:
         x = open.pop(0)
-        if len(return_list) >0:
-            direction.append(return_list.pop(0))
-        print "pop", x
+        print "before entering the second loop",x
         if is_complete(x):
-            for i in range(0,index+1):
-                return_list2.append(direction.pop(0))
-            return return_list2
-        print "not goal"
+            return x 
         if (x in closed) == False:
-            print "not visited"
+            print "the state ready for executing",x
             current = find_zero(x)
-            moves = next_states(current,board)
-            print "legal moves", moves
+            moves = next_states(current,x)
             for move in moves:
                 print move[2]
                 y = action(move,x)
-                index += step(y)    
-                return_list.append(move[2])
                 print "successor state", y
                 open.append(y)
                 closed.append(x)
         visited += 1
-        print index
     return None
-def step(board):
+def bfs(board):
+    i =1
+    visited = []
+    myQueue = []
+    parent = []
+    path = []
+    #visited.append(board)
     if is_complete(board):
-        return 1
-    else:
-        return 0
-        
+        return True
+    myQueue.append(board)
+    while myQueue:
+        i += 1
+        currentState = myQueue.pop(0)
+        print currentState
+        visited.append(currentState)
+        if is_complete(currentState):
+            return currentState
+        moves = next_states(find_zero(currentState),currentState)
+        for nextStates in moves:
+            next = action(nextStates,currentState)
+            if next not in visited:
+                parent.append((currentState,next))
+                ##string += nextStates[2]
+                ##tuple = (next, nextStates[2])
+                myQueue.append(next)
+                #path.append(nextStates[2])
+       # print "path", path
+       # print "the values in myQueue is ", myQueue
+    return False
+def backtrace(parent,board,currentState):
+    path = [currentState]
+    while currentState != board:
+        currentState = search_parent(parent,currentState)
+        path.append(currentState)
+    path.reverse()
+    moves(path)
+def search_parent(parent,currentState):
+    return[item for item in parent if item[1] == currentState][0][0]
+def moves(path):
+    s = ''
+    i = 0
+    while i + 1 < len(path):
+        ancestor = path[i]
+        child = path[i+1]
+        if find_zero(ancestor)[0] - find_zero(child)[0] == 1:
+            s +='L'
+        if find_zero(child)[0] - find_zero(ancestor)[0] == 1:
+            s +='R'
+        if find_zero(ancestor)[1] - find_zero(child)[1] == 1:
+            s +='U'
+        if find_zero(child)[1] - find_zero(ancestor)[1] == 1:
+            s +='D'
+    i = i + 1
+    print s
+
 def main():
     import sys
     board=[[int(n.strip()) for n in line.split(',')] for line in sys.stdin.readlines()]
@@ -115,7 +159,7 @@ def main():
     print(find_zero(board))
     print board
     visited = 0
-    solution = BFS(board,visited)
+    solution = bfs(board)
     if solution:
         print "SOLVABLE"
         print solution
