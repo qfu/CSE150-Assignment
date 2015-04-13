@@ -64,7 +64,7 @@ def next_states(current,board):
             continue
         if tempx < 0 or tempy < 0:
             continue
-        if swap_tile(find_zero(board),x,board) != board:
+        if swap_tile(current,x,board) != board:
             final.append(x)
     return final
 
@@ -100,6 +100,7 @@ def BFS(board,visited):
                 open.append(y)
                 closed.append(x)
         visited += 1
+        print index
     return None
 def step(board):
     if is_complete(board):
