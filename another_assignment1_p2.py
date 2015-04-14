@@ -2,7 +2,7 @@
 #
 __author__ = 'z2tan@ucsd.edu,qfu@ucsd.edu'
 
-import Queue
+#import Queue
 import sys
 import copy
 
@@ -15,6 +15,7 @@ class BFS_node:
 		self.prestate = prestate
 		self.nextmove = self.getmoves(board, location, preaction)
 
+
 	def getmoves (self, board, location, preaction):
 		rowMax = len(board)
 		colMax = len(board[0])
@@ -22,19 +23,20 @@ class BFS_node:
 		row = location [0]
 		col = location [1]
 
-		nextmoves = Queue.Queue()
+		#nextmoves = Queue.Queue()
+		nextmoves = []
 
 		if row !=0 and preaction != 'D':
-			nextmoves.put('U')
+			nextmoves.append('U')
 
 		if row != rowMax - 1 and preaction != 'U':
-			nextmoves.put('D')
+			nextmoves.append('D')
 
 		if col != 0 and preaction != 'R':
-			nextmoves.put('L')
+			nextmoves.append('L')
 
 		if col != colMax - 1 and preaction != 'L':
-			nextmoves.put('R')
+			nextmoves.append('R')
 
 		return nextmoves
 
@@ -89,11 +91,10 @@ def visit_state(b1,b2):
 
 def BFS_search (nodes, visited):
 
-	while not nodes.empty():
-		current_node = nodes.get()
-
-		while not current_node.nextmove.empty():
-			nextmove = current_node.nextmove.get()
+	while len(nodes) != 0:
+		current_node = nodes.pop(0)
+		while len(current_node.nextmove) != 0:
+			nextmove = current_node.nextmove.pop(0)
 			old_location = current_node.location
 			new_location = get_next_location(old_location, nextmove)
 			newboard = get_next_board(current_node.board, old_location, new_location)
@@ -118,7 +119,7 @@ def BFS_search (nodes, visited):
 			if is_complete(newboard):
 				return new_node
 
-			nodes.put(new_node)
+			nodes.append(new_node)
 
 	return None
 
@@ -134,11 +135,11 @@ def main():
 		print 'It is already solved! No moves needed!'
 		return
 
-	nodes = Queue.Queue()
+	nodes = []
 
 	node = BFS_node(board, location, 'N', None)
 
-	nodes.put(node)
+	nodes.append(node)
 
 	visited = [board]
 
@@ -150,13 +151,16 @@ def main():
 
 	solution = []
 
+	s = ''
+
 	while solution_node.preaction != 'N':
 		solution.append(solution_node.preaction)
 		solution_node = solution_node.prestate
 
 	while len(solution) != 0:
-		print solution.pop()
+		s += solution.pop()
 
+	print s
 	return
 
 
