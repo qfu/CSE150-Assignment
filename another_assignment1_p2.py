@@ -87,8 +87,7 @@ def visit_state(b1,b2):
 	a = True
 	return a
 
-def BFS_search (nodes):
-	visited = []
+def BFS_search (nodes, visited):
 
 	while not nodes.empty():
 		current_node = nodes.get()
@@ -111,7 +110,7 @@ def BFS_search (nodes):
 				continue
 
 			# if it is new state
-			visited.append(current_node.board)
+			visited.append(newboard)
 
 			new_node = BFS_node(newboard, new_location, nextmove, current_node)
 
@@ -141,7 +140,9 @@ def main():
 
 	nodes.put(node)
 
-	solution_node = BFS_search(nodes)
+	visited = [board]
+
+	solution_node = BFS_search(nodes, visited)
 
 	if solution_node is None:
 		print 'UNSOLVABLE'
