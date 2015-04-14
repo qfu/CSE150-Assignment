@@ -77,7 +77,7 @@ def next_states(current,board):
     #print final
     return final
 
-def BFS(board,visited):
+'''def BFS(board,visited):
     closed = []
     open = [board]   
     while len(open) > 0:
@@ -97,6 +97,7 @@ def BFS(board,visited):
                 closed.append(x)
         visited += 1
     return None
+    '''
 def bfs(board):
     i =1
     visited = []
@@ -110,21 +111,18 @@ def bfs(board):
     while myQueue:
         i += 1
         currentState = myQueue.pop(0)
-        print currentState
+       # print currentState
         visited.append(currentState)
         if is_complete(currentState):
-            return currentState
+            backtrace(parent,board,currentState)
+            return True
         moves = next_states(find_zero(currentState),currentState)
         for nextStates in moves:
             next = action(nextStates,currentState)
             if next not in visited:
                 parent.append((currentState,next))
-                ##string += nextStates[2]
-                ##tuple = (next, nextStates[2])
                 myQueue.append(next)
-                #path.append(nextStates[2])
-       # print "path", path
-       # print "the values in myQueue is ", myQueue
+       # print "the queue has",myQueue
     return False
 def backtrace(parent,board,currentState):
     path = [currentState]
@@ -132,6 +130,7 @@ def backtrace(parent,board,currentState):
         currentState = search_parent(parent,currentState)
         path.append(currentState)
     path.reverse()
+    #print(path)
     moves(path)
 def search_parent(parent,currentState):
     return[item for item in parent if item[1] == currentState][0][0]
@@ -142,29 +141,25 @@ def moves(path):
         ancestor = path[i]
         child = path[i+1]
         if find_zero(ancestor)[0] - find_zero(child)[0] == 1:
-            s +='L'
-        if find_zero(child)[0] - find_zero(ancestor)[0] == 1:
-            s +='R'
-        if find_zero(ancestor)[1] - find_zero(child)[1] == 1:
             s +='U'
-        if find_zero(child)[1] - find_zero(ancestor)[1] == 1:
+        if find_zero(child)[0] - find_zero(ancestor)[0] == 1:
             s +='D'
-    i = i + 1
+        if find_zero(ancestor)[1] - find_zero(child)[1] == 1:
+            s +='L'
+        if find_zero(child)[1] - find_zero(ancestor)[1] == 1:
+            s +='R'
+        i = i + 1
     print s
 
 def main():
     import sys
     board=[[int(n.strip()) for n in line.split(',')] for line in sys.stdin.readlines()]
-    print(is_complete(board))
-    print(find_zero(board))
-    print board
     visited = 0
     solution = bfs(board)
     if solution:
         print "SOLVABLE"
-        print solution
     else:
         print "UNSOLVABLE"
-    print(board_info(board))
+    #print(board_info(board))
 if __name__ == '__main__':
     main()
