@@ -80,15 +80,6 @@ def is_complete(board):
 				check += 1	
 	return True
 
-def visit_state(b1,b2): 
-	a = False
-	for y,row in enumerate(b1): 
-		for x,col in enumerate(row): 
-			if b1[y][x] != b2[y][x]: 
-				a = False
-				return a
-	a = True
-	return a
 
 def DFS_search (nodes, limite):
 	visited = [nodes[0].board]
@@ -109,18 +100,8 @@ def DFS_search (nodes, limite):
 				newboard = get_next_board(current_node.board, old_location, new_location)
 
 				# check if the new board is visited
-				visited_node = False
-
-				for v in visited:
-					if visit_state(v, newboard):
-						visited_node = True
-						break
-
-				if visited_node:
-					continue
-
-				# if it is new state
-				visited.append(newboard)
+				if newboard not in visited:
+					visited.append(newboard)
 
 				new_node = DFS_node(newboard, new_location, nextmove, level + 1, current_node)
 
