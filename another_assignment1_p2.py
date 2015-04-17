@@ -79,15 +79,6 @@ def is_complete(board):
 				check += 1	
 	return True
 
-def visit_state(b1,b2): 
-	a = False
-	for y,row in enumerate(b1): 
-		for x,col in enumerate(row): 
-			if b1[y][x] != b2[y][x]: 
-				a = False
-				return a
-	a = True
-	return a
 
 def BFS_search (nodes, visited):
 
@@ -99,19 +90,8 @@ def BFS_search (nodes, visited):
 			new_location = get_next_location(old_location, nextmove)
 			newboard = get_next_board(current_node.board, old_location, new_location)
 
-			# check if the new board is visited
-			visited_node = False
-
-			for v in visited:
-				if visit_state(v, newboard):
-					visited_node = True
-					break
-
-			if visited_node:
-				continue
-
-			# if it is new state
-			visited.append(newboard)
+			if newboard not in visited:
+				visited.append(newboard)		
 
 			new_node = BFS_node(newboard, new_location, nextmove, current_node)
 
@@ -149,18 +129,14 @@ def main():
 		print 'UNSOLVABLE'
 		return
 
-	solution = []
-
 	s = ''
 
 	while solution_node.preaction != 'N':
-		solution.append(solution_node.preaction)
+		s += solution_node.preaction
 		solution_node = solution_node.prestate
 
-	while len(solution) != 0:
-		s += solution.pop()
 
-	print s
+	print s [::-1]
 	return
 
 
