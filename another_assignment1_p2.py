@@ -91,15 +91,13 @@ def BFS_search (nodes, visited):
 			newboard = get_next_board(current_node.board, old_location, new_location)
 
 			if newboard not in visited:
-				visited.append(newboard)		
-
-			new_node = BFS_node(newboard, new_location, nextmove, current_node)
-
+				visited.append(newboard)
+				new_node = BFS_node(newboard, new_location, nextmove, current_node)
+				nodes.append(new_node)
 			# check if it is solution
 			if is_complete(newboard):
 				return new_node
 
-			nodes.append(new_node)
 
 	return None
 

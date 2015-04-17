@@ -102,10 +102,8 @@ def DFS_search (nodes, limite):
 				# check if the new board is visited
 				if newboard not in visited:
 					visited.append(newboard)
-
-				new_node = DFS_node(newboard, new_location, nextmove, level + 1, current_node)
-
-				nodes.append(new_node)
+					new_node = DFS_node(newboard, new_location, nextmove, level + 1, current_node)
+					nodes.append(new_node)
 
 	return None
 
