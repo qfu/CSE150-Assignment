@@ -136,13 +136,11 @@ def main():
 	s = ''
 
 	while solution_node.preaction != 'N':
-		solution.append(solution_node.preaction)
+		s += solution_node.preaction
 		solution_node = solution_node.prestate
 
-	while len(solution) != 0:
-		s += solution.pop()
 
-	print s
+	print s [::-1]
 	return
 
 
