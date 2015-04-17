@@ -85,9 +85,9 @@ def DFS_search (nodes, limite):
 	visited = [nodes[0].board]
 	while len(nodes) != 0:
 		current_node = nodes.pop()
-
-		if is_complete(current_node.board) == True:
-			return current_node
+		if current_node.level == limite:
+			if is_complete(current_node.board) == True:
+				return current_node
 
 
 		old_location = current_node.location
@@ -115,13 +115,16 @@ def main():
 		print 'UNSOLVABLE'
 		return
 
-	nodes = []
+	limit = 0
 
-	node = DFS_node(board, location, 'N', 0, None)
+	solution_node = None
 
-	nodes.append(node)
-
-	solution_node = DFS_search(nodes, 5)
+	while limit <= 12: 
+		nodes = [DFS_node(board, location, 'N', 0, None)]
+		solution_node = DFS_search(nodes, limit)
+		limit += 1
+		if solution_node is not None:
+			break
 
 	if solution_node is None:
 		print 'UNSOLVABLE'
