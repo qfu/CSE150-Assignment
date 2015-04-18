@@ -1,7 +1,7 @@
 #This is the second  Program 
 import copy 
 import time
-__author__ = 'z2tan@ucsd.edu,qfu@ucsd.edu'
+__author__ = 'z2tan@ucsd.edu,qfu@ucsd.edu,xul008@ucsd.edu'
 def is_complete(board):
     # your code here
     check = 0
