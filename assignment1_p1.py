@@ -3,7 +3,7 @@
 __author__ = 'z2tan@ucsd.edu,qfu@ucsd.edu,xul008@ucsd.edu'
 def is_complete(board):
 	# your code here
-	check = 0
+	check = 9
 	for row in board:
 		for col in row:
 			if col != check:
